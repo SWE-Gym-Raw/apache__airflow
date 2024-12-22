@@ -109,17 +109,17 @@ def test_get_provider_requirements():
 
 def test_get_removed_providers():
     # Modify it every time we schedule provider for removal or remove it
-    assert [] == get_removed_provider_ids()
+    assert get_removed_provider_ids() == []
 
 
 def test_get_suspended_provider_ids():
     # Modify it every time we suspend/resume provider
-    assert [] == get_suspended_provider_ids()
+    assert get_suspended_provider_ids() == []
 
 
 def test_get_suspended_provider_folders():
     # Modify it every time we suspend/resume provider
-    assert [] == get_suspended_provider_folders()
+    assert get_suspended_provider_folders() == []
 
 
 @pytest.mark.parametrize(
@@ -228,7 +228,8 @@ def test_get_documentation_package_path():
     ],
 )
 def test_get_install_requirements(provider: str, version_suffix: str, expected: str):
-    assert get_install_requirements(provider, version_suffix).strip() == expected.strip()
+    actual = get_install_requirements(provider, version_suffix)
+    assert actual.strip() == expected.strip()
 
 
 @pytest.mark.parametrize(
@@ -241,8 +242,6 @@ def test_get_install_requirements(provider: str, version_suffix: str, expected: 
                 "apache.beam": ["apache-airflow-providers-apache-beam", "apache-beam[gcp]"],
                 "apache.cassandra": ["apache-airflow-providers-apache-cassandra"],
                 "cncf.kubernetes": ["apache-airflow-providers-cncf-kubernetes>=7.2.0"],
-                "common.compat": ["apache-airflow-providers-common-compat"],
-                "common.sql": ["apache-airflow-providers-common-sql"],
                 "facebook": ["apache-airflow-providers-facebook>=2.2.0"],
                 "leveldb": ["plyvel>=1.5.1"],
                 "microsoft.azure": ["apache-airflow-providers-microsoft-azure"],
@@ -266,8 +265,6 @@ def test_get_install_requirements(provider: str, version_suffix: str, expected: 
                 "apache.beam": ["apache-airflow-providers-apache-beam", "apache-beam[gcp]"],
                 "apache.cassandra": ["apache-airflow-providers-apache-cassandra"],
                 "cncf.kubernetes": ["apache-airflow-providers-cncf-kubernetes>=7.2.0.dev0"],
-                "common.compat": ["apache-airflow-providers-common-compat"],
-                "common.sql": ["apache-airflow-providers-common-sql"],
                 "facebook": ["apache-airflow-providers-facebook>=2.2.0.dev0"],
                 "leveldb": ["plyvel>=1.5.1"],
                 "microsoft.azure": ["apache-airflow-providers-microsoft-azure"],
@@ -291,8 +288,6 @@ def test_get_install_requirements(provider: str, version_suffix: str, expected: 
                 "apache.beam": ["apache-airflow-providers-apache-beam", "apache-beam[gcp]"],
                 "apache.cassandra": ["apache-airflow-providers-apache-cassandra"],
                 "cncf.kubernetes": ["apache-airflow-providers-cncf-kubernetes>=7.2.0b0"],
-                "common.compat": ["apache-airflow-providers-common-compat"],
-                "common.sql": ["apache-airflow-providers-common-sql"],
                 "facebook": ["apache-airflow-providers-facebook>=2.2.0b0"],
                 "leveldb": ["plyvel>=1.5.1"],
                 "microsoft.azure": ["apache-airflow-providers-microsoft-azure"],
@@ -312,7 +307,8 @@ def test_get_install_requirements(provider: str, version_suffix: str, expected: 
     ],
 )
 def test_get_package_extras(version_suffix: str, expected: dict[str, list[str]]):
-    assert get_package_extras("google", version_suffix=version_suffix) == expected
+    actual = get_package_extras("google", version_suffix=version_suffix)
+    assert actual == expected
 
 
 def test_get_provider_details():
@@ -439,7 +435,7 @@ def test_validate_provider_info_with_schema():
 @pytest.mark.parametrize(
     "provider_id, min_version",
     [
-        ("amazon", "2.8.0"),
+        ("amazon", "2.9.0"),
         ("fab", "2.9.0"),
     ],
 )
@@ -504,7 +500,7 @@ def test_provider_jinja_context():
         "CHANGELOG_RELATIVE_PATH": "../../providers/src/airflow/providers/amazon",
         "SUPPORTED_PYTHON_VERSIONS": ["3.9", "3.10", "3.11", "3.12"],
         "PLUGINS": [],
-        "MIN_AIRFLOW_VERSION": "2.8.0",
+        "MIN_AIRFLOW_VERSION": "2.9.0",
         "PROVIDER_REMOVED": False,
         "PROVIDER_INFO": provider_info,
     }
